@@ -71,3 +71,59 @@ ex:
         int 21h
         end main
 ```
+
+Ask the user to enter a string, and print its length
+```
+dosseg
+.model small
+.data
+.stack 100
+.code
+main:
+        mov ax, @data
+        mov ds, ax
+        ;
+        mov cl, 0
+again:
+        mov ah, 1
+        int 21h
+        inc cl
+        cmp al, 13
+        jne again
+        ; value in bl
+        mov bl, cl
+        mov ah, "$"
+        mov al, "$"
+        push ax
+        jmp print
+
+print:
+        mov bh, 10
+lp:
+        mov ax, 0
+        mov al, bl
+        div bh
+        push ax
+        mov bl, al
+        cmp al, 0
+        jz pt
+        jmp lp
+pt:
+        pop ax
+        cmp ah, "$"
+        jz ex
+        mov dl, ah
+        add dl, 30h
+        mov ah, 2
+        int 21h
+        jmp pt
+
+
+
+        
+
+ex:
+        mov ah, 4ch
+        int 21h
+        end main
+```
